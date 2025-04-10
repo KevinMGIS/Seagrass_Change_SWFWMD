@@ -1,0 +1,50 @@
+[
+    {
+        "Year": 2004,
+        "Total_Acres": 142023.4728590599,
+        "Difference": null,
+        "Percentage_Change": null
+    },
+    {
+        "Year": 2006,
+        "Total_Acres": 114835.00743809617,
+        "Difference": -27188.465420963723,
+        "Percentage_Change": -19.14364215550819
+    },
+    {
+        "Year": 2008,
+        "Total_Acres": 117799.2959112797,
+        "Difference": 2964.288473183522,
+        "Percentage_Change": 2.581345653485914
+    },
+    {
+        "Year": 2010,
+        "Total_Acres": 118715.73385109221,
+        "Difference": 916.4379398125166,
+        "Percentage_Change": 0.7779655495587426
+    },
+    {
+        "Year": 2012,
+        "Total_Acres": 117183.81703489365,
+        "Difference": -1531.916816198558,
+        "Percentage_Change": -1.2904075698340673
+    },
+    {
+        "Year": 2014,
+        "Total_Acres": 118010.13792214265,
+        "Difference": 826.3208872489922,
+        "Percentage_Change": 0.705149318529998
+    },
+    {
+        "Year": 2016,
+        "Total_Acres": 120216.56682432623,
+        "Difference": 2206.4289021835866,
+        "Percentage_Change": 1.8696943678171798
+    },
+    {
+        "Year": 2018,
+        "Total_Acres": 119385.36700009926,
+        "Difference": -831.1998242269765,
+        "Percentage_Change": -0.6914187005869314
+    }
+]
