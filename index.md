@@ -1,44 +1,43 @@
-[View the Interactive Map & Dashboard](map.html)
+[View the Interactive Map & Dashboard](https://kevinmgis.github.io/Seagrass_Change_SWFWMD/map.html)
 
 **Notice: This project is for display purposes only and is a coding exercise.**
 
 # Seagrass Coverage Dashboard
 
-This project is an interactive web application designed to visualize and analyze seagrass coverage over time along selected coastal areas. It combines spatial data and temporal statistics to provide insights into the changes in seagrass extent by year.
+This project is an interactive web mapping application designed to visualize seagrass coverage along select coastal areas over time. The spatial data is hosted on ArcGIS Online as a Feature Service, which allows each year’s data to be accessed as a separate feature layer. This approach improves data management and leverages ArcGIS Online's optimized serving of geospatial information.
 
 ## Project Overview
 
-The project utilizes individual GeoJSON files for the years 2004, 2006, 2008, 2010, 2012, 2014, 2016, and 2018. Each file contains polygon data representing seagrass coverage along with important attributes, such as total area (in acres). A separate JSON file, containing precomputed change statistics, is used to generate a Plotly chart that dynamically displays the trends in seagrass coverage and percentage changes over time.
-
-## Interactive Features
-
-- **Map Display:**  
-  An interactive map built using the ArcGIS API for JavaScript displays the seagrass polygons. Each year’s data is loaded as a separate layer with a unique color. By default, only the 2018 layer is visible, and users can toggle each year on or off using the legend in the top right.
-
+The application displays seagrass data from multiple years (2004, 2006, 2008, 2010, 2012, 2014, 2016, and 2018) through separate layers hosted on ArcGIS Online.  
+- **Interactive Map:**  
+  A web map built with the ArcGIS API for JavaScript loads each year's seagrass data as an individual layer from a hosted Feature Service. By default, only the 2018 layer is visible; users can toggle other layers on and off using a legend with color-coded checkboxes.
 - **Basemap Selector:**  
-  A basemap selector is provided in the top left, allowing users to switch between different basemaps (with Oceans set as the default) to adjust the visual context of the map.
+  A basemap selector (defaulting to the Oceans basemap) lets users choose from different background maps to enhance the visualization context.
+- **Dynamic Chart:**  
+  A Plotly chart displays precomputed statistics such as total seagrass area and percentage change over time. This chart updates alongside map interactions, providing a temporal perspective on seagrass trends.
 
-- **Pop-up Information:**  
-  Clicking on any seagrass polygon brings up a popup displaying details such as the year and the total area in acres.
+## Data and Technical Stack
 
-- **Dashboard Chart:**  
-  A Plotly chart positioned in the bottom left displays both bar and line charts that illustrate the overall seagrass area and percentage changes over the years.
+- **Data Hosting on ArcGIS Online:**  
+  The seagrass data is hosted as a Feature Service on ArcGIS Online. Each year’s data is stored in its own layer within the service, making it easy to manage and toggle within the interactive map.
+- **Front-end Technologies:**  
+  - **ArcGIS API for JavaScript:** Powers the interactive map, handling the loading and filtering of feature layers directly from ArcGIS Online.
+  - **Plotly:** Used for creating a dynamic, interactive chart that visualizes change statistics.
+  - **HTML, CSS, and JavaScript:** Provide the overall structure and interactivity of the web application.
 
-## Data Processing and Technical Stack
+## How It Works
 
-- **Data Processing:**  
-  The spatial analysis was performed using Python and ArcPy to compute year-over-year change statistics, which were then exported to static JSON files used by the web application.
-
-- **Front-end Tools:**  
-  - **ArcGIS API for JavaScript:** Used for rendering the interactive map and managing GeoJSON layers.
-  - **Plotly:** Used for generating the dynamic chart that visualizes temporal trends.
-  - **HTML/CSS/JavaScript:** These technologies are used to create the overall structure and interactivity of the project.
-
-- **Hosting:**  
-  The project is hosted on GitHub Pages, making it a fully code-based, static solution that demonstrates how spatial data visualization can be achieved with a simple yet effective workflow.
+1. **Data Layers:**  
+   The map loads individual layers corresponding to each year from the ArcGIS Online Feature Service. Unique colors are assigned to each layer, and a legend enables users to toggle visibility by year.
+2. **Basemap Selection:**  
+   A dropdown control allows users to switch between different basemaps, with the Oceans basemap as the default for coastal detail.
+3. **Interactive Chart:**  
+   Precomputed seagrass change statistics are loaded from a JSON file and rendered via Plotly, offering a visual summary of trends over the years.
+4. **Optimized Performance:**  
+   Although the underlying geospatial data is large, hosting it on ArcGIS Online ensures optimized delivery, while the application includes a loading indicator to improve the user experience during data retrieval.
 
 ## Conclusion
 
-This interactive dashboard serves as a proof-of-concept for integrating spatial data, statistical analysis, and web mapping into a cohesive, user-friendly platform. While the data is static and the project is primarily a coding exercise, the techniques demonstrated here can be further extended to support dynamic, real-time applications in environmental monitoring and resource management.
+This coding exercise demonstrates an end-to-end workflow for building an interactive geospatial dashboard—from processing and hosting data on ArcGIS Online to integrating advanced web mapping and dynamic charting. While the application is static and designed for demonstration purposes, the techniques and technologies used here can be extended to support more complex, real-time environmental analyses.
 
 Feel free to explore the interactive map and dashboard by clicking the link above!
