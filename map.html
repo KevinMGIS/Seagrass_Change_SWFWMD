@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seagrass Coverage by Year and Statistics</title>
+  <!-- ArcGIS API for JavaScript CSS -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+  <style>
+    /* Reset margins and use flex layout for the page */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+    /* Header for the map title; it sits above the map */
+    #header {
+      width: 100%;
+      background-color: white;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 110;
+    }
+    /* Container for the map and controls */
+    #appContainer {
+      position: relative;
+      flex: 1;
+      height: calc(100% - 60px); /* Adjust if header height changes */
+    }
+    /* Map view container */
+    #viewDiv {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    /* Basemap selector styling (top left) */
+    #basemapSelector {
+      position: absolute;
+      top: 10px;
+      left: 70px;
+      z-index: 101;
+      background: white;
+      padding: 5px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    /* Legend styling (top right) */
+    #legendDiv {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    /* Chart container styling (bottom left) */
+    #chartDiv {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: 500px;
+      height: 300px;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+  </style>
+  <!-- Load Plotly for charting -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Load ArcGIS API for JavaScript -->
+  <script src="https://js.arcgis.com/4.25/"></script>
+</head>
+<body>
+  <!-- Header for map title -->
+  <div id="header">Seagrass Coverage by Year and Statistics</div>
+  
+  <!-- Container for the map and controls -->
+  <div id="appContainer">
+    <!-- Basemap Selector (top left) -->
+    <div id="basemapSelector">
+      <label for="basemapSelect">Basemap:</label>
+      <select id="basemapSelect">
+        <option value="oceans" selected>Oceans</option>
+        <option value="topo-vector">Topo Vector</option>
+        <option value="satellite">Satellite</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="streets">Streets</option>
+      </select>
+    </div>
+  
+    <!-- Legend for toggling layers (top right) -->
+    <div id="legendDiv">
+      <strong>Select Years:</strong>
+      <div id="legendContent"></div>
+    </div>
+  
+    <!-- Map container -->
+    <div id="viewDiv"></div>
+  
+    <!-- Chart container (bottom left) -->
+    <div id="chartDiv"></div>
+  </div>
+  
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/GeoJSONLayer"
+    ], function(Map, MapView, GeoJSONLayer) {
+
+      // Define the years and their corresponding colors.
+      var years = [2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018];
+      var yearColors = {
+        2004: "#FF5733",  // reddish
+        2006: "#33FF57",  // greenish
+        2008: "#3357FF",  // blue
+        2010: "#FF33A6",  // pink
+        2012: "#A633FF",  // purple
+        2014: "#33FFA6",  // teal
+        2016: "#FFA633",  // orange
+        2018: "#33A6FF"   // light blue
+      };
+      
+      var layers = {};  // Store layers keyed by year.
+
+      // Create a map with the Oceans basemap (default).
+      var map = new Map({
+        basemap: "oceans"
+      });
+      
+      // Create and add a GeoJSONLayer for each year.
+      years.forEach(function(year) {
+        var url = "data/" + year + ".geojson";
+        var layer = new GeoJSONLayer({
+          url: url,
+          visible: (year === 2018), // Default: only 2018 is visible.
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "simple-fill",
+              color: yearColors[year],
+              outline: {
+                color: "#000000",
+                width: 0.5
+              }
+            }
+          },
+          popupTemplate: {
+            title: "Seagrass Data - {Year}",
+            content: "<p>Total Area: {Calc_Acres} acres</p>"
+          }
+        });
+        map.add(layer);
+        layers[year] = layer;
+      });
+      
+      // Create the MapView with a closer zoom.
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-82.5, 27.5],
+        zoom: 9
+      });
+      
+      // Build the legend (top right) with checkboxes and color swatches.
+      var legendContent = document.getElementById("legendContent");
+      years.forEach(function(year) {
+        var container = document.createElement("div");
+        container.style.marginBottom = "5px";
+        container.style.display = "flex";
+        container.style.alignItems = "center";
+
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "cb_" + year;
+        checkbox.value = year;
+        if (year === 2018) { checkbox.checked = true; }
+        checkbox.addEventListener("change", function(event) {
+          var yr = event.target.value;
+          layers[yr].visible = event.target.checked;
+        });
+
+        var colorSwatch = document.createElement("span");
+        colorSwatch.style.display = "inline-block";
+        colorSwatch.style.width = "12px";
+        colorSwatch.style.height = "12px";
+        colorSwatch.style.backgroundColor = yearColors[year];
+        colorSwatch.style.border = "1px solid #000";
+        colorSwatch.style.marginRight = "5px";
+
+        var label = document.createElement("label");
+        label.htmlFor = "cb_" + year;
+        label.textContent = year;
+
+        container.appendChild(checkbox);
+        container.appendChild(colorSwatch);
+        container.appendChild(label);
+        legendContent.appendChild(container);
+      });
+      
+      // Basemap selector control (top left) to change the basemap.
+      var basemapSelect = document.getElementById("basemapSelect");
+      basemapSelect.addEventListener("change", function(event) {
+        var selectedBasemap = event.target.value;
+        map.basemap = selectedBasemap;
+      });
+      
+      // Fetch the precomputed statistics JSON and render a Plotly chart.
+      fetch("data/Seagrass_Change_Stats_Updated.json")
+        .then(response => response.json())
+        .then(data => {
+          var chartYears = data.map(item => item.Year);
+          var totalAcres = data.map(item => item.Total_Acres);
+          var pctChange = data.map(item => item.Percentage_Change);
+
+          var trace1 = {
+            x: chartYears,
+            y: totalAcres,
+            type: 'bar',
+            name: 'Total Acres'
+          };
+
+          var trace2 = {
+            x: chartYears,
+            y: pctChange,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Percentage Change',
+            yaxis: 'y2'
+          };
+
+          var layout = {
+            title: 'Seagrass Coverage and Change Over Time',
+            yaxis: { title: 'Total Acres' },
+            yaxis2: {
+              title: 'Percentage Change (%)',
+              overlaying: 'y',
+              side: 'right'
+            },
+            barmode: 'group',
+            margin: { r: 200, l: 60, t: 50, b: 50 },
+            legend: { x: 1.5, y: 1, orientation: 'v' }
+          };
+
+          Plotly.newPlot('chartDiv', [trace1, trace2], layout);
+        })
+        .catch(error => console.error("Error loading stats JSON: ", error));
+    });
+  </script>
+</body>
+</html>

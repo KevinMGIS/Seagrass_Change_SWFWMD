@@ -1,0 +1,23 @@
+# Site settings
+title: "Seagrass Coverage Dashboard"
+description: "An interactive web map and dashboard displaying seagrass coverage by year and change statistics."
+url: "https://yourusername.github.io"   # Replace with your GitHub Pages URL.
+baseurl: ""                             # If deploying to a subdirectory, specify here (e.g., /projectname).
+
+# Build settings
+markdown: kramdown
+theme: minima                           # You can change or remove this theme if you use a custom design.
+plugins:
+  - jekyll-feed
+
+# Exclude from processing (add any files/folders you don't want Jekyll to build)
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+# Permalinks (optional, customize if needed)
+permalink: pretty
+
+# Optional: Enable incremental build for faster rebuilds during development.
+incremental: true
