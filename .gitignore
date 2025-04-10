@@ -1,0 +1,19 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment directories
+env/
+venv/
+
+# Ignore log files
+*.log
+
+# Ignore ArcGIS File Geodatabases and related lock files
+*.gdb/
+*.lock
+
+# Ignore system files
+.DS_Store
+Thumbs.db
